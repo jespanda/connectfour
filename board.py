@@ -29,10 +29,11 @@ class Board:
 
     def placeMove(self, pos_x, player):
         pos_y = self.checkVert(pos_x)
-        if self.isLegal(pos_x, pos_y):
-            self.board[Point(x=pos_x, y=pos_y)] = player
+        curr_point = Point(x=pos_x, y=pos_y)
+        if self.isLegal(curr_point):
+            self.board[curr_point] = player
             self.printBoard()
-            if self.isWin(pos_x, pos_y, player):
+            if self.isWin(curr_point, player):
                 self.complete = True
                 print "Congratulations Player " + player
         else:
@@ -45,24 +46,24 @@ class Board:
                 break
         return None
 
-    def isLegal(self, pos_x, pos_y):
-        if pos_y == None:
+    def isLegal(self, point):
+        if point.y == None:
             return False
-        if pos_x < 0 or pos_x>self.size_x:
+        if point.x < 0 or point.x>self.size_x:
             return False
         return True
 
-    def isWin(self, pos_x, pos_y, player):
-        horiz_tally = self.tallyCounter(pos_x, pos_y, 1, 0, player) +  self.tallyCounter(pos_x, pos_y, -1, 0, player) - 1
-        vert_tally = self.tallyCounter(pos_x, pos_y, 0, 1, player) + self.tallyCounter(pos_x, pos_y, 0, -1, player) - 1
-        diag_up_tally = self.tallyCounter(pos_x, pos_y, 1, 1, player) + self.tallyCounter(pos_x, pos_y, -1, -1, player) - 1
-        diag_down_tally = self.tallyCounter(pos_x, pos_y, -1, 1, player) + self.tallyCounter(pos_x, pos_y, 1, -1, player) - 1
+    def isWin(self, point, player):
+        horiz_tally = self.tallyCounter(point, 1, 0, player) +  self.tallyCounter(point, -1, 0, player) - 1
+        vert_tally = self.tallyCounter(point, 0, 1, player) + self.tallyCounter(point, 0, -1, player) - 1
+        diag_up_tally = self.tallyCounter(point, 1, 1, player) + self.tallyCounter(point, -1, -1, player) - 1
+        diag_down_tally = self.tallyCounter(point, -1, 1, player) + self.tallyCounter(point, 1, -1, player) - 1
         max_tally = max(horiz_tally, vert_tally, diag_up_tally, diag_down_tally)
         return max_tally >= 4
 
-    def tallyCounter(self, pos_x, pos_y, multi_x, multi_y, player):
-        tmp_x = pos_x
-        tmp_y = pos_y
+    def tallyCounter(self, point, multi_x, multi_y, player):
+        tmp_x = point.x
+        tmp_y = point.y
         tally = 0
         while self.board.get(Point(x=tmp_x, y=tmp_y)) == player:
             tally += 1

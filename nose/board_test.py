@@ -26,7 +26,9 @@ def check_vert_test():
 
 @with_setup(setup_func)
 def check_is_legal_test():
-    assert not(newGame.isLegal(10, 0) or newGame.isLegal(0, None) or newGame.isLegal(-1, 0))
+    assert not(newGame.isLegal(Point(x=10, y=0)))
+    assert not(newGame.isLegal(Point(x=0, y=None))) 
+    assert not(newGame.isLegal(Point(x=-1, y=0)))
 
 @with_setup(setup_func)
 def check_place_move_test():
@@ -35,6 +37,7 @@ def check_place_move_test():
     assert newGame.board.get(Point(x=0, y=0)) == "X" or newGame.board.get(Point(x=0, y=0)) == "Y"
 
 @with_setup(setup_func)
+@attr("test")
 def check_vert_win_test():
     newGame.placeMove(0, "X")
     newGame.placeMove(0, "X")
